@@ -1,0 +1,143 @@
+networks:
+  benchy-net:
+    name: benchy-net
+
+x-geth-validator: &geth-validator
+  # Pinned: geth >= 1.14 removed --unlock/--mine (Clique signing now requires
+  # an external Clef signer). v1.13.x is the last line with the classic
+  # unlock-and-mine flow this project uses for Clique sealing.
+  image: ethereum/client-go:v1.13.15
+  networks:
+    - benchy-net
+  restart: unless-stopped
+
+x-nethermind-node: &nethermind-node
+  image: nethermind/nethermind:latest
+  networks:
+    - benchy-net
+  restart: unless-stopped
+
+services:
+  alice:
+    <<: *geth-validator
+    container_name: benchy-alice
+    volumes:
+      - ./network/genesis.json:/genesis.json:ro
+      - ./network/keystore/alice.json:/root/.ethereum/keystore/alice.json:ro
+      - ./network/keystore/alice.password:/alice.password:ro
+      - ./network/data/alice:/root/.ethereum
+    ports:
+      - "21001:8545"
+      - "31001:30303"
+      - "31001:30303/udp"
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        if [ ! -d /root/.ethereum/geth ]; then geth init /genesis.json; fi
+        exec geth --networkid 133713 --datadir /root/.ethereum \
+          --http --http.addr 0.0.0.0 --http.port 8545 --http.corsdomain "*" \
+          --http.api eth,net,web3,personal,admin,txpool,miner,clique \
+          --http.vhosts "*" \
+          --port 30303 \
+          --unlock 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 --password /alice.password \
+          --allow-insecure-unlock --mine --miner.etherbase 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 \
+          --syncmode full --nodiscover --verbosity 2
+
+  bob:
+    <<: *geth-validator
+    container_name: benchy-bob
+    volumes:
+      - ./network/genesis.json:/genesis.json:ro
+      - ./network/keystore/bob.json:/root/.ethereum/keystore/bob.json:ro
+      - ./network/keystore/bob.password:/bob.password:ro
+      - ./network/data/bob:/root/.ethereum
+    ports:
+      - "21002:8545"
+      - "31002:30303"
+      - "31002:30303/udp"
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        if [ ! -d /root/.ethereum/geth ]; then geth init /genesis.json; fi
+        exec geth --networkid 133713 --datadir /root/.ethereum \
+          --http --http.addr 0.0.0.0 --http.port 8545 --http.corsdomain "*" \
+          --http.api eth,net,web3,personal,admin,txpool,miner,clique \
+          --http.vhosts "*" \
+          --port 30303 \
+          --unlock 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 --password /bob.password \
+          --allow-insecure-unlock --mine --miner.etherbase 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 \
+          --syncmode full --nodiscover --verbosity 2
+
+  cassandra:
+    <<: *geth-validator
+    container_name: benchy-cassandra
+    volumes:
+      - ./network/genesis.json:/genesis.json:ro
+      - ./network/keystore/cassandra.json:/root/.ethereum/keystore/cassandra.json:ro
+      - ./network/keystore/cassandra.password:/cassandra.password:ro
+      - ./network/data/cassandra:/root/.ethereum
+    ports:
+      - "21003:8545"
+      - "31003:30303"
+      - "31003:30303/udp"
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        if [ ! -d /root/.ethereum/geth ]; then geth init /genesis.json; fi
+        exec geth --networkid 133713 --datadir /root/.ethereum \
+          --http --http.addr 0.0.0.0 --http.port 8545 --http.corsdomain "*" \
+          --http.api eth,net,web3,personal,admin,txpool,miner,clique \
+          --http.vhosts "*" \
+          --port 30303 \
+          --unlock 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC --password /cassandra.password \
+          --allow-insecure-unlock --mine --miner.etherbase 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC \
+          --syncmode full --nodiscover --verbosity 2
+
+  driss:
+    <<: *nethermind-node
+    container_name: benchy-driss
+    volumes:
+      - ./network/chainspec.json:/chainspec.json:ro
+      - ./network/data/driss:/nethermind_data
+    ports:
+      - "21004:8545"
+      - "31004:30303"
+      - "31004:30303/udp"
+    command:
+      - --config=none
+      - --Init.ChainSpecPath=/chainspec.json
+      - --Init.BaseDbPath=/nethermind_data/db
+      - --Init.LogFileName=/nethermind_data/log.txt
+      - --Init.DiscoveryEnabled=false
+      - --Network.P2PPort=30303
+      - --Network.DiscoveryPort=30303
+      - --JsonRpc.Enabled=true
+      - --JsonRpc.Host=0.0.0.0
+      - --JsonRpc.Port=8545
+      - --JsonRpc.EnabledModules=Eth,Net,Web3,Admin,TxPool,Clique
+
+  elena:
+    <<: *nethermind-node
+    container_name: benchy-elena
+    volumes:
+      - ./network/chainspec.json:/chainspec.json:ro
+      - ./network/data/elena:/nethermind_data
+    ports:
+      - "21005:8545"
+      - "31005:30303"
+      - "31005:30303/udp"
+    command:
+      - --config=none
+      - --Init.ChainSpecPath=/chainspec.json
+      - --Init.BaseDbPath=/nethermind_data/db
+      - --Init.LogFileName=/nethermind_data/log.txt
+      - --Init.DiscoveryEnabled=false
+      - --Network.P2PPort=30303
+      - --Network.DiscoveryPort=30303
+      - --JsonRpc.Enabled=true
+      - --JsonRpc.Host=0.0.0.0
+      - --JsonRpc.Port=8545
+      - --JsonRpc.EnabledModules=Eth,Net,Web3,Admin,TxPool,Clique

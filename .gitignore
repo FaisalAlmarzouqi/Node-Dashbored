@@ -1,0 +1,6 @@
+node_modules/
+network/data/
+network/launch.log
+network/testnet-nodes.json
+.env
+*.log

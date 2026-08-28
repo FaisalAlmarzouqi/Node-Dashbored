@@ -1,0 +1,28 @@
+{
+  "name": "benchy",
+  "version": "1.0.0",
+  "description": "Launch, monitor and benchmark a private Ethereum network (Clique PoA, multi-client).",
+  "type": "commonjs",
+  "bin": {
+    "benchy": "./bin/benchy.js"
+  },
+  "scripts": {
+    "generate-network": "node scripts/generate-network.js",
+    "compile": "node scripts/compile.js"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.4",
+    "commander": "^12.1.0",
+    "ethers": "^6.13.2",
+    "execa": "^5.1.1",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "solc": "^0.8.26"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

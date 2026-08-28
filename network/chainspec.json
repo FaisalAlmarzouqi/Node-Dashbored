@@ -1,0 +1,111 @@
+{
+  "name": "BenchyClique",
+  "engine": {
+    "clique": {
+      "params": {
+        "period": 5,
+        "epoch": 30000,
+        "blockReward": "0x0"
+      }
+    }
+  },
+  "params": {
+    "gasLimitBoundDivisor": "0x400",
+    "chainId": 133713,
+    "maximumExtraDataSize": "0x200",
+    "maxCodeSize": 24576,
+    "maxCodeSizeTransition": 0,
+    "eip150Transition": 0,
+    "eip158Transition": 0,
+    "eip160Transition": 0,
+    "eip161abcTransition": 0,
+    "eip161dTransition": 0,
+    "eip155Transition": 0,
+    "eip140Transition": 0,
+    "eip211Transition": 0,
+    "eip214Transition": 0,
+    "eip658Transition": 0,
+    "eip145Transition": 0,
+    "eip1014Transition": 0,
+    "eip1052Transition": 0,
+    "eip1283DisableTransition": 0,
+    "eip1283ReenableTransition": 0,
+    "eip1344Transition": 0,
+    "eip1706Transition": 0,
+    "eip1884Transition": 0,
+    "eip2028Transition": 0,
+    "eip2565Transition": 0,
+    "eip2929Transition": 0,
+    "eip2930Transition": 0,
+    "eip1559Transition": 0,
+    "eip3198Transition": 0,
+    "eip3529Transition": 0,
+    "eip3541Transition": 0
+  },
+  "genesis": {
+    "seal": {
+      "ethereum": {
+        "nonce": "0x0000000000000000",
+        "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "difficulty": "0x1",
+    "gasLimit": "0x1c9c380",
+    "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb9226670997970c51812dc3a010c7d01b50e0d17dc79c83c44cdddb6a900fa2b585dd299e03d12fa4293bc0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "accounts": {
+    "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266": {
+      "balance": "0xd3c21bcecceda1000000"
+    },
+    "0x70997970c51812dc3a010c7d01b50e0d17dc79c8": {
+      "balance": "0xd3c21bcecceda1000000"
+    },
+    "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc": {
+      "balance": "0xd3c21bcecceda1000000"
+    },
+    "0x0000000000000000000000000000000000000001": {
+      "builtin": {
+        "name": "ecrecover",
+        "pricing": {
+          "linear": {
+            "base": 3000,
+            "word": 0
+          }
+        }
+      }
+    },
+    "0x0000000000000000000000000000000000000002": {
+      "builtin": {
+        "name": "sha256",
+        "pricing": {
+          "linear": {
+            "base": 60,
+            "word": 12
+          }
+        }
+      }
+    },
+    "0x0000000000000000000000000000000000000003": {
+      "builtin": {
+        "name": "ripemd160",
+        "pricing": {
+          "linear": {
+            "base": 600,
+            "word": 120
+          }
+        }
+      }
+    },
+    "0x0000000000000000000000000000000000000004": {
+      "builtin": {
+        "name": "identity",
+        "pricing": {
+          "linear": {
+            "base": 15,
+            "word": 3
+          }
+        }
+      }
+    }
+  }
+}
